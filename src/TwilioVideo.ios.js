@@ -154,8 +154,8 @@ export default class extends Component {
    * @param  {String} roomName    The connecting room name
    * @param  {String} accessToken The Twilio's JWT access token
    */
-  connect({roomName, accessToken}) {
-    TWVideoModule.connect(accessToken, roomName)
+  connect({roomName, accessToken, constraints}) {
+    TWVideoModule.connect(accessToken, roomName, constraints)
   }
 
   /**

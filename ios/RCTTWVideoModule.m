@@ -34,6 +34,7 @@ static NSString* cameraDidStopRunning         = @"cameraDidStopRunning";
 @property (strong, nonatomic) TVILocalVideoTrack* localVideoTrack;
 @property (strong, nonatomic) TVILocalAudioTrack* localAudioTrack;
 @property (strong, nonatomic) TVIRoom *room;
+@property (strong, nonatomic) NSString *constraints;
 
 @end
 
@@ -42,6 +43,108 @@ static NSString* cameraDidStopRunning         = @"cameraDidStopRunning";
 @synthesize bridge = _bridge;
 
 RCT_EXPORT_MODULE();
+
+
+
+
+-(TVIVideoConstraints*) videoConstraintsTiny {
+  return [TVIVideoConstraints constraintsWithBlock:^(TVIVideoConstraintsBuilder *builder) {
+    builder.minSize = TVIVideoConstraintsSize352x288;
+    builder.maxSize = TVIVideoConstraintsSize352x288;
+    builder.aspectRatio = TVIAspectRatio16x9;
+    builder.minFrameRate = TVIVideoConstraintsFrameRateNone;
+    builder.maxFrameRate = TVIVideoConstraintsFrameRateNone;
+  }];
+}
+-(TVIVideoConstraints*) videoConstraintsSmall {
+  return [TVIVideoConstraints constraintsWithBlock:^(TVIVideoConstraintsBuilder *builder) {
+    builder.minSize = TVIVideoConstraintsSize480x360;
+    builder.maxSize = TVIVideoConstraintsSize480x360;
+    builder.aspectRatio = TVIAspectRatio4x3;
+    builder.minFrameRate = TVIVideoConstraintsFrameRateNone;
+    builder.maxFrameRate = TVIVideoConstraintsFrameRateNone;
+  }];
+}
+-(TVIVideoConstraints*) videoConstraintsMedium {
+  return [TVIVideoConstraints constraintsWithBlock:^(TVIVideoConstraintsBuilder *builder) {
+    builder.minSize = TVIVideoConstraintsSize640x480;
+    builder.maxSize = TVIVideoConstraintsSize640x480;
+    builder.aspectRatio = TVIAspectRatio4x3;
+    builder.minFrameRate = TVIVideoConstraintsFrameRateNone;
+    builder.maxFrameRate = TVIVideoConstraintsFrameRateNone;
+  }];
+}
+-(TVIVideoConstraints*) videoConstraintsLarge {
+  return [TVIVideoConstraints constraintsWithBlock:^(TVIVideoConstraintsBuilder *builder) {
+    builder.minSize = TVIVideoConstraintsSize960x540;
+    builder.maxSize = TVIVideoConstraintsSize960x540;
+    builder.aspectRatio = TVIAspectRatio16x9;
+    builder.minFrameRate = TVIVideoConstraintsFrameRateNone;
+    builder.maxFrameRate = TVIVideoConstraintsFrameRateNone;
+  }];
+}
+-(TVIVideoConstraints*) videoConstraintsHD {
+  return [TVIVideoConstraints constraintsWithBlock:^(TVIVideoConstraintsBuilder *builder) {
+    builder.minSize = TVIVideoConstraintsSize1280x960;
+    builder.maxSize = TVIVideoConstraintsSize1280x960;
+    builder.aspectRatio = TVIAspectRatio4x3;
+    builder.minFrameRate = TVIVideoConstraintsFrameRateNone;
+    builder.maxFrameRate = TVIVideoConstraintsFrameRateNone;
+  }];
+}
+
+
+
+
+-(TVIVideoConstraints*) videoConstraintsTinyLowBandwidth {
+  return [TVIVideoConstraints constraintsWithBlock:^(TVIVideoConstraintsBuilder *builder) {
+    builder.minSize = TVIVideoConstraintsSize352x288;
+    builder.maxSize = TVIVideoConstraintsSize352x288;
+    builder.aspectRatio = TVIAspectRatio16x9;
+    builder.minFrameRate = TVIVideoConstraintsFrameRate10;
+    builder.maxFrameRate = TVIVideoConstraintsFrameRate15;
+  }];
+}
+-(TVIVideoConstraints*) videoConstraintsSmallLowBandwidth {
+  return [TVIVideoConstraints constraintsWithBlock:^(TVIVideoConstraintsBuilder *builder) {
+    builder.minSize = TVIVideoConstraintsSize480x360;
+    builder.maxSize = TVIVideoConstraintsSize480x360;
+    builder.aspectRatio = TVIAspectRatio4x3;
+    builder.minFrameRate = TVIVideoConstraintsFrameRate10;
+    builder.maxFrameRate = TVIVideoConstraintsFrameRate15;
+  }];
+}
+-(TVIVideoConstraints*) videoConstraintsMediumLowBandwidth {
+  return [TVIVideoConstraints constraintsWithBlock:^(TVIVideoConstraintsBuilder *builder) {
+    builder.minSize = TVIVideoConstraintsSize640x480;
+    builder.maxSize = TVIVideoConstraintsSize640x480;
+    builder.aspectRatio = TVIAspectRatio4x3;
+    builder.minFrameRate = TVIVideoConstraintsFrameRate10;
+    builder.maxFrameRate = TVIVideoConstraintsFrameRate15;
+  }];
+}
+-(TVIVideoConstraints*) videoConstraintsLargeLowBandwidth {
+  return [TVIVideoConstraints constraintsWithBlock:^(TVIVideoConstraintsBuilder *builder) {
+    builder.minSize = TVIVideoConstraintsSize960x540;
+    builder.maxSize = TVIVideoConstraintsSize960x540;
+    builder.aspectRatio = TVIAspectRatio16x9;
+    builder.minFrameRate = TVIVideoConstraintsFrameRate10;
+    builder.maxFrameRate = TVIVideoConstraintsFrameRate15;
+  }];
+}
+-(TVIVideoConstraints*) videoConstraintsHDLowBandwidth {
+  return [TVIVideoConstraints constraintsWithBlock:^(TVIVideoConstraintsBuilder *builder) {
+    builder.minSize = TVIVideoConstraintsSize1280x960;
+    builder.maxSize = TVIVideoConstraintsSize1280x960;
+    builder.aspectRatio = TVIAspectRatio4x3;
+    builder.minFrameRate = TVIVideoConstraintsFrameRate10;
+    builder.maxFrameRate = TVIVideoConstraintsFrameRate15;
+  }];
+}
+
+
+
+
 
 - (dispatch_queue_t)methodQueue {
   return dispatch_get_main_queue();
@@ -96,7 +199,47 @@ RCT_EXPORT_METHOD(startLocalVideo) {
     self.camera = [[TVICameraCapturer alloc] init];
     self.camera.delegate = self;
 
-    self.localVideoTrack = [TVILocalVideoTrack trackWithCapturer:self.camera enabled:YES constraints:[self videoConstraints]];
+
+
+if([self.constraints isEqualToString: @"Tiny"]){
+    self.localVideoTrack = [TVILocalVideoTrack trackWithCapturer:self.camera enabled:YES constraints:[self videoConstraintsTiny]];
+}
+if([self.constraints isEqualToString: @"Small"]){
+
+    self.localVideoTrack = [TVILocalVideoTrack trackWithCapturer:self.camera enabled:YES constraints:[self videoConstraintsSmall]];
+}
+if([self.constraints isEqualToString: @"Medium"]){
+    self.localVideoTrack = [TVILocalVideoTrack trackWithCapturer:self.camera enabled:YES constraints:[self videoConstraintsMedium]];
+}
+if([self.constraints isEqualToString: @"Large"]){
+    self.localVideoTrack = [TVILocalVideoTrack trackWithCapturer:self.camera enabled:YES constraints:[self videoConstraintsLarge]];
+}
+if([self.constraints isEqualToString: @"HD"]){
+    self.localVideoTrack = [TVILocalVideoTrack trackWithCapturer:self.camera enabled:YES constraints:[self videoConstraintsHD]];
+}
+
+if([self.constraints isEqualToString: @"TinyLowBandwidth"]){
+    self.localVideoTrack = [TVILocalVideoTrack trackWithCapturer:self.camera enabled:YES constraints:[self videoConstraintsTinyLowBandwidth]];
+}
+if([self.constraints isEqualToString: @"SmallLowBandwidth"]){
+    self.localVideoTrack = [TVILocalVideoTrack trackWithCapturer:self.camera enabled:YES constraints:[self videoConstraintsSmallLowBandwidth]];
+}
+if([self.constraints isEqualToString: @"MediumLowBandwidth"]){
+    self.localVideoTrack = [TVILocalVideoTrack trackWithCapturer:self.camera enabled:YES constraints:[self videoConstraintsMediumLowBandwidth]];
+}
+if([self.constraints isEqualToString: @"LargeLowBandwidth"]){
+    self.localVideoTrack = [TVILocalVideoTrack trackWithCapturer:self.camera enabled:YES constraints:[self videoConstraintsLargeLowBandwidth]];
+}
+if([self.constraints isEqualToString: @"HDLowBandwidth"]){
+    self.localVideoTrack = [TVILocalVideoTrack trackWithCapturer:self.camera enabled:YES constraints:[self videoConstraintsHDLowBandwidth]];
+}
+
+if(self.constraints == nil){
+    self.localVideoTrack = [TVILocalVideoTrack trackWithCapturer:self.camera enabled:YES constraints:[self videoConstraintsLarge]];
+}
+
+
+
   }
 }
 
@@ -136,7 +279,13 @@ RCT_EXPORT_METHOD(flipCamera) {
   }
 }
 
-RCT_EXPORT_METHOD(connect:(NSString *)accessToken roomName:(NSString *)roomName) {
+RCT_EXPORT_METHOD(connect:(NSString *)accessToken roomName:(NSString *)roomName constraints:(NSString *)constraints) {
+  self.constraints = nil;
+
+  if(constraints != nil){
+    self.constraints = constraints;
+  }
+
   TVIConnectOptions *connectOptions = [TVIConnectOptions optionsWithToken:accessToken block:^(TVIConnectOptionsBuilder * _Nonnull builder) {
     if (self.localVideoTrack) {
       builder.videoTracks = @[self.localVideoTrack];
@@ -150,6 +299,10 @@ RCT_EXPORT_METHOD(connect:(NSString *)accessToken roomName:(NSString *)roomName)
   }];
 
   self.room = [TwilioVideo connectWithOptions:connectOptions delegate:self];
+    NSLog(@"%d", 'Constraints:');
+
+    NSLog(@"%@", self.constraints);
+
 }
 
 RCT_EXPORT_METHOD(disconnect) {

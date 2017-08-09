@@ -100,7 +100,7 @@ export default class Example extends Component {
   }
 
   _onConnectButtonPress = () => {
-    this.refs.twilioVideo.connect({ roomName: this.state.roomName, accessToken: this.state.token })
+    this.refs.twilioVideo.connect({ roomName: this.state.roomName, accessToken: this.state.token , constraints:'TinyLowBandwidth'})
     this.setState({status: 'connecting'})
   }
 
@@ -155,7 +155,7 @@ export default class Example extends Component {
           this.state.status === 'disconnected' &&
           <View>
             <Text style={styles.welcome}>
-              React Native Twilio Video
+              React Native Twilio Video V2
             </Text>
             <TextInput
               style={styles.input}
