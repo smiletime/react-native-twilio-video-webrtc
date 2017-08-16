@@ -230,7 +230,7 @@ export default class Example extends Component {
         }
 
         <TwilioVideo
-          ref="twilioVideo"
+          ref="twilioVideo" constraints="Tiny"
           onRoomDidConnect={ this._onRoomDidConnect }
           onRoomDidDisconnect={ this._onRoomDidDisconnect }
           onRoomDidFailToConnect= { this._onRoomDidFailToConnect }

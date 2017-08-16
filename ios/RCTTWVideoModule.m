@@ -48,6 +48,7 @@ RCT_EXPORT_MODULE();
 
 
 -(TVIVideoConstraints*) videoConstraintsTiny {
+
   return [TVIVideoConstraints constraintsWithBlock:^(TVIVideoConstraintsBuilder *builder) {
     builder.minSize = TVIVideoConstraintsSize352x288;
     builder.maxSize = TVIVideoConstraintsSize352x288;
@@ -199,7 +200,10 @@ RCT_EXPORT_MODULE();
   }
 }
 
-RCT_EXPORT_METHOD(startLocalVideo) {
+RCT_EXPORT_METHOD(startLocalVideo:(NSString *)constraints) {
+    self.constraints = constraints;
+
+
   if ([TVICameraCapturer availableSources].count > 0) {
     self.camera = [[TVICameraCapturer alloc] init];
     self.camera.delegate = self;
@@ -294,12 +298,9 @@ RCT_EXPORT_METHOD(flipCamera) {
   }
 }
 
-RCT_EXPORT_METHOD(connect:(NSString *)accessToken roomName:(NSString *)roomName constraints:(NSString *)constraints) {
+RCT_EXPORT_METHOD(connect:(NSString *)accessToken roomName:(NSString *)roomName) {
   self.constraints = nil;
 
-  if(constraints != nil){
-    self.constraints = constraints;
-  }
 
   TVIConnectOptions *connectOptions = [TVIConnectOptions optionsWithToken:accessToken block:^(TVIConnectOptionsBuilder * _Nonnull builder) {
     if (self.localVideoTrack) {
@@ -314,9 +315,6 @@ RCT_EXPORT_METHOD(connect:(NSString *)accessToken roomName:(NSString *)roomName 
   }];
 
   self.room = [TwilioVideo connectWithOptions:connectOptions delegate:self];
-    NSLog(@"%d", 'Constraints:');
-
-    NSLog(@"%@", self.constraints);
 
 }
 

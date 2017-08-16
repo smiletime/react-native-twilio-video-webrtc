@@ -24,6 +24,7 @@ export default class extends Component {
      *
      * @param {{roomName, participants}}
      */
+    constraints:PropTypes.string,
     onRoomDidConnect: PropTypes.func,
     /**
      * Called when the room has disconnected
@@ -155,8 +156,8 @@ export default class extends Component {
    * @param  {String} roomName    The connecting room name
    * @param  {String} accessToken The Twilio's JWT access token
    */
-  connect({roomName, accessToken, constraints}) {
-    TWVideoModule.connect(accessToken, roomName, constraints)
+  connect({roomName, accessToken}) {
+    TWVideoModule.connect(accessToken, roomName)
   }
 
   /**
@@ -167,7 +168,7 @@ export default class extends Component {
   }
 
   _startLocalVideo() {
-    TWVideoModule.startLocalVideo()
+    TWVideoModule.startLocalVideo(this.props.constraints);
   }
 
   _stopLocalVideo() {
