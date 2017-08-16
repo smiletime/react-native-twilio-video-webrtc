@@ -168,7 +168,14 @@ export default class extends Component {
   }
 
   _startLocalVideo() {
-    TWVideoModule.startLocalVideo(this.props.constraints);
+    let constraints =     this.props.constraints;
+    if(constraints){
+      constraints = null;
+    }
+
+    TWVideoModule.startLocalVideo(constraints);
+
+
   }
 
   _stopLocalVideo() {
