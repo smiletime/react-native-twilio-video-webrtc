@@ -15,7 +15,8 @@ import {
   NativeModules,
   findNodeHandle,
 } from 'react-native';
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 
 const propTypes = {
   ...View.propTypes,
@@ -42,7 +43,7 @@ const propTypes = {
   /**
    * Callback that is called when connecting to room fails.
    */
-  onConnectFailure: PropTypes.func,
+  onRoomDidFailToConnect: PropTypes.func,
 
   /**
    * Callback that is called when user is disconnected from room.
@@ -83,8 +84,8 @@ const nativeEvents = {
 };
 
 class CustomTwilioVideoView extends Component {
-  connect({ accessToken }) {
-    this.runCommand(nativeEvents.connectToRoom, [accessToken]);
+  connect({roomName, accessToken}) {
+    this.runCommand(nativeEvents.connectToRoom, [roomName, accessToken]);
   }
 
   disconnect() {
@@ -107,7 +108,7 @@ class CustomTwilioVideoView extends Component {
     switch (Platform.OS) {
       case 'android':
         UIManager.dispatchViewManagerCommand(
-          findNodeHandle(this),
+          findNodeHandle(this.refs.videoView),
           event,
           args
         );
@@ -117,13 +118,35 @@ class CustomTwilioVideoView extends Component {
     }
   }
 
+  buildNativeEventWrappers() {
+    return [
+      'onCameraSwitched',
+      'onVideoChanged',
+      'onAudioChanged',
+      'onRoomDidConnect',
+      'onRoomDidFailToConnect',
+      'onRoomDidDisconnect',
+      'onParticipantAddedVideoTrack',
+      'onParticipantRemovedVideoTrack',
+      'onRoomParticipantDidConnect',
+      'onRoomParticipantDidDisconnect',
+    ].reduce((wrappedEvents, eventName) => {
+      if (this.props[eventName]) {
+        return {
+          ...wrappedEvents,
+          [eventName]: (data) => this.props[eventName](data.nativeEvent),
+        };
+      }
+      return wrappedEvents;
+    }, {});
+  }
+
   render() {
     return (
       <NativeCustomTwilioVideoView
-        onConnected={(event) => {
-          this.props.onRoomDidConnect && this.props.onRoomDidConnect(event.nativeEvent);
-        }}
+        ref="videoView"
         {...this.props}
+        {...this.buildNativeEventWrappers()}
       />
     );
   }
