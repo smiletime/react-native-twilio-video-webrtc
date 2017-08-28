@@ -55,7 +55,7 @@ RCT_CUSTOM_VIEW_PROPERTY(trackIdentifier, RCTTWVideoTrackIdentifier, TVIVideoVie
   if (json) {
     RCTTWVideoModule *videoModule = [self.bridge moduleForName:@"TWVideoModule"];
     RCTTWVideoTrackIdentifier *id = [RCTConvert RCTTWVideoTrackIdentifier:json];
-
+    view.contentMode = UIViewContentModeScaleAspectFill;
     [videoModule addParticipantView:view identity:id.participantIdentity trackId:id.videoTrackId];
   }
 }

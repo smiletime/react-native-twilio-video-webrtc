@@ -25,7 +25,7 @@ RCT_CUSTOM_VIEW_PROPERTY(enabled, BOOL, TVIVideoView) {
   if (json) {
     RCTTWVideoModule *videoModule = [self.bridge moduleForName:@"TWVideoModule"];
     BOOL isEnabled = [RCTConvert BOOL:json];
-        view.contentMode = UIViewContentModeScaleAspectFill;
+    view.contentMode = UIViewContentModeScaleAspectFill;
     if (isEnabled) {
       [videoModule addLocalView:view];
     } else {
