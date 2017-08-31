@@ -52,7 +52,9 @@ const styles = StyleSheet.create({
     height: 250,
     position: "absolute",
     right: 10,
-    bottom: 10
+    bottom: 10,
+      borderWidth:1,
+      borderColor:'red',
   },
   remoteGrid: {
     flex: 1,
@@ -108,7 +110,32 @@ export default class Example extends Component {
     this.refs.twilioVideo.disconnect()
   }
 
-  _onMuteButtonPress = () => {
+
+
+    _onEnableCameraPress = () => {
+        console.log('Enable camera Press');
+        this.refs.twilioVideo._startLocalVideo();
+    }
+
+    _onEnableMicPress = () => {
+        console.log('Enable mic Press');
+        this.refs.twilioVideo._startLocalAudio();
+    }
+
+    _onDisableCameraPress = () => {
+        console.log('Disable camera Press');
+        this.refs.twilioVideo._stopLocalVideo();
+    }
+
+    _onDisableMicPress = () => {
+        console.log('Disable mic Press');
+        this.refs.twilioVideo._stopLocalAudio();
+    }
+
+
+
+
+    _onMuteButtonPress = () => {
     this.refs.twilioVideo.setLocalAudioEnabled(!this.state.isAudioEnabled)
       .then(isEnabled => this.setState({isAudioEnabled: isEnabled}))
   }
@@ -206,6 +233,10 @@ export default class Example extends Component {
                 onPress={this._onEndButtonPress}>
                 <Text style={{fontSize: 12}}>End</Text>
               </TouchableOpacity>
+
+
+
+
               <TouchableOpacity
                 style={styles.optionButton}
                 onPress={this._onMuteButtonPress}>
@@ -216,21 +247,45 @@ export default class Example extends Component {
                 onPress={this._onFlipButtonPress}>
                 <Text style={{fontSize: 12}}>Flip</Text>
               </TouchableOpacity>
-              <TwilioVideoLocalView
-                enabled={true}
-                style={styles.localVideo}
-              />
+
             </View>
           </View>
         }
 
+        <TouchableOpacity
+            style={styles.optionButton}
+            onPress={this._onEnableCameraPress}>
+          <Text style={{fontSize: 12}}>Enable Camera</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+            style={styles.optionButton}
+            onPress={this._onEnableMicPress}>
+          <Text style={{fontSize: 12}}>Enable Mic</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+            style={styles.optionButton}
+            onPress={this._onDisableCameraPress}>
+          <Text style={{fontSize: 12}}>Disable Camera</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+            style={styles.optionButton}
+            onPress={this._onDisableMicPress}>
+          <Text style={{fontSize: 12}}>Disable Mic</Text>
+        </TouchableOpacity>
+        <TwilioVideoLocalView
+            enabled={true}
+            style={styles.localVideo}
+        />
         <TwilioVideo
-          ref="twilioVideo"
-          onRoomDidConnect={ this._onRoomDidConnect }
-          onRoomDidDisconnect={ this._onRoomDidDisconnect }
-          onRoomDidFailToConnect= { this._onRoomDidFailToConnect }
-          onParticipantAddedVideoTrack={ this._onParticipantAddedVideoTrack }
-          onParticipantRemovedVideoTrack= { this.onParticipantRemovedVideoTrack }
+            ref="twilioVideo"
+            onRoomDidConnect={ this._onRoomDidConnect }
+            onRoomDidDisconnect={ this._onRoomDidDisconnect }
+            onRoomDidFailToConnect= { this._onRoomDidFailToConnect }
+            onParticipantAddedVideoTrack={ this._onParticipantAddedVideoTrack }
+            onParticipantRemovedVideoTrack= { this.onParticipantRemovedVideoTrack }
         />
       </View>
     );
