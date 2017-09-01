@@ -114,6 +114,11 @@ export default class extends Component {
     this.flipCamera = this.flipCamera.bind(this)
     this.connect = this.connect.bind(this)
     this.disconnect = this.disconnect.bind(this)
+    this._startLocalVideo = this._startLocalVideo.bind(this)
+    this._stopLocalVideo = this._stopLocalVideo.bind(this)
+    this._startLocalAudio = this._startLocalAudio.bind(this)
+    this._stopLocalAudio = this._stopLocalAudio.bind(this)
+
   }
 
   componentWillMount() {
