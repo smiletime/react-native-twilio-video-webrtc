@@ -234,7 +234,10 @@ export default class Example extends Component {
                 <Text style={{fontSize: 12}}>End</Text>
               </TouchableOpacity>
 
-
+        <TwilioVideoLocalView
+            enabled={true}
+            style={styles.localVideo}
+        />
 
 
               <TouchableOpacity
@@ -275,10 +278,7 @@ export default class Example extends Component {
             onPress={this._onDisableMicPress}>
           <Text style={{fontSize: 12}}>Disable Mic</Text>
         </TouchableOpacity>
-        <TwilioVideoLocalView
-            enabled={true}
-            style={styles.localVideo}
-        />
+
         <TwilioVideo
             ref="twilioVideo"
             onRoomDidConnect={ this._onRoomDidConnect }
