@@ -117,11 +117,11 @@ export default class extends Component {
 
   static defaultProps = {
     constraints: {
-      aspectRatio: '16:9',
-      minWidth: 960,
-      maxWidth: 1280,
-      minFrameRate: 0,
-      maxFrameRate: 0
+      aspectRatio: '4:3',
+      minWidth: 240,
+      maxWidth: 240,
+      minFrameRate: 10,
+      maxFrameRate: 15
     }
   }
 
