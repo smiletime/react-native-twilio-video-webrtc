@@ -465,7 +465,7 @@ RCT_EXPORT_METHOD(disconnect) {
 
 
 
--(TVIVideoConstraints*) videoConstraints {
+-(TVIVideoConstraints*) videoConstraints:(NSDictionary *)constraints {
   return [TVIVideoConstraints constraintsWithBlock:^(TVIVideoConstraintsBuilder *builder) {
     builder.minSize = TVIVideoConstraintsSize352x288;
     builder.maxSize = TVIVideoConstraintsSize352x288;
