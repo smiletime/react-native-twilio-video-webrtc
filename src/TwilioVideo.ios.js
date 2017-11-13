@@ -125,7 +125,7 @@ export default class extends Component {
     }
   }
 
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this._subscriptions = []
@@ -194,7 +194,7 @@ export default class extends Component {
   _startLocalVideo () {
     const screenShare = this.props.screenShare || false
     const constraints = this.props.constraints || false
-    TWVideoModule.startLocalVideo(screenShare,constraints)
+    TWVideoModule.startLocalVideo(screenShare, constraints)
   }
 
   _stopLocalVideo () {
