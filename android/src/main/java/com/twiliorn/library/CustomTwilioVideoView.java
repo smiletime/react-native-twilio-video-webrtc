@@ -43,6 +43,8 @@ import com.twilio.video.TwilioException;
 import com.twilio.video.Video;
 import com.twilio.video.VideoTrack;
 import com.twilio.video.VideoView;
+import com.twilio.video.VideoConstraints;
+import com.twilio.video.VideoDimensions;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -169,7 +171,14 @@ public class CustomTwilioVideoView extends View implements LifecycleEventListene
         );
 
         if (cameraCapturer.getSupportedFormats().size() > 0) {
-            localVideoTrack = LocalVideoTrack.create(getContext(), true, cameraCapturer);
+         VideoConstraints videoConstraints = new VideoConstraints.Builder()
+                            .minVideoDimensions(VideoDimensions.CIF_VIDEO_DIMENSIONS)
+                            .maxVideoDimensions(VideoDimensions.CIF_VIDEO_DIMENSIONS)
+                            .minFps(5)
+                            .maxFps(15)
+                            .build();
+
+            localVideoTrack = LocalVideoTrack.create(getContext(), true, cameraCapturer, videoConstraints);
             if (thumbnailVideoView != null && localVideoTrack != null) {
                 localVideoTrack.addRenderer(thumbnailVideoView);
             }
@@ -190,6 +199,13 @@ public class CustomTwilioVideoView extends View implements LifecycleEventListene
             * If the local video track was released when the app was put in the background, recreate.
             */
             if (cameraCapturer != null && localVideoTrack == null) {
+                VideoConstraints videoConstraints = new VideoConstraints.Builder()
+                                        .minVideoDimensions(VideoDimensions.CIF_VIDEO_DIMENSIONS)
+                                        .maxVideoDimensions(VideoDimensions.CIF_VIDEO_DIMENSIONS)
+                                        .minFps(5)
+                                        .maxFps(15)
+                                        .build();
+
                 localVideoTrack = LocalVideoTrack.create(getContext(), true, cameraCapturer);
             }
 
@@ -245,15 +261,15 @@ public class CustomTwilioVideoView extends View implements LifecycleEventListene
         /*
          * Release the local media ensuring any memory allocated to audio or video is freed.
          */
-        if (localVideoTrack != null) {
-            localVideoTrack.release();
-            localVideoTrack = null;
-        }
+        //if (localVideoTrack != null) {
+        //    localVideoTrack.release();
+        //    localVideoTrack = null;
+        //}
 
-        if (localAudioTrack != null) {
-            localAudioTrack.release();
-            localAudioTrack = null;
-        }
+        //if (localAudioTrack != null) {
+        //    localAudioTrack.release();
+        //    localAudioTrack = null;
+        //}
     }
 
     // ====== CONNECTING ===========================================================================
@@ -263,7 +279,12 @@ public class CustomTwilioVideoView extends View implements LifecycleEventListene
         this.accessToken = accessToken;
 
         Log.i("CustomTwilioVideoView", "Starting connect flow");
-        createLocalMedia();
+
+        if(cameraCapturer == null){
+          createLocalMedia();
+        }else{
+          connectToRoom();
+        }
     }
 
     public void connectToRoom() {
@@ -497,7 +518,8 @@ public class CustomTwilioVideoView extends View implements LifecycleEventListene
                 participant.getVideoTracks().get(0)
             );
         }
-        participant.setListener(null);
+        //something about this breaking.
+        //participant.setListener(null);
     }
 
 
