@@ -288,6 +288,8 @@ public class CustomTwilioVideoView extends View implements LifecycleEventListene
         if(cameraCapturer == null){
           createLocalMedia();
         }else{
+                localAudioTrack = LocalAudioTrack.create(getContext(), true);
+
           connectToRoom();
         }
     }
